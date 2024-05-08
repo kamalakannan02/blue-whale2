@@ -1,0 +1,302 @@
+<h1>python labaratories</h1>
+
+<h1>relative velocity</h1>
+<p>
+    # Define the velocity vectors
+    a = [1, 2, 3, 4, 5]
+    b = [10, 20, 30, 40, 60]
+    
+    # Calculate relative velocity using vector subtraction
+    relative_velocity = [b[i] - a[i] for i in range(len(a))]
+    
+    print("Relative velocity:", relative_velocity)
+    
+</p>
+
+<h1> iris data </h1>
+
+<p>
+    import numpy as np
+import tensorflow as tf
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+# Load Iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target.reshape(-1, 1)
+
+# One-hot encode the target variable
+encoder = OneHotEncoder(categories='auto')
+y = encoder.fit_transform(y).toarray()
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Build the neural network model
+model = Sequential([
+    Dense(10, activation='relu', input_shape=(X_train.shape[1],)),
+    Dense(8, activation='relu'),
+    Dense(3, activation='softmax')
+])
+
+# Compile the model
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train the model
+model.fit(X_train, y_train, epochs=100, batch_size=10, verbose=1)
+
+# Evaluate the model
+loss, accuracy = model.evaluate(X_test, y_test, verbose=0)
+print("Test Loss:", loss)
+print("Test Accuracy:", accuracy)
+
+</p>
+
+<h1> using numpy for dot product of two vectors</h1>
+<p>
+    import numpy as np
+
+# Define two vectors
+vector1 = np.array([1, 2, 3])
+vector2 = np.array([4, 5, 6])
+
+# Calculate the dot product
+dot_product = np.dot(vector1, vector2)
+
+print("Dot product of the two vectors:", dot_product)
+
+</p>
+
+<h1>dot product function</h1>
+
+<p>
+    def dot_product(vector1, vector2):
+    """
+    Calculate the dot product of two vectors.
+
+    Args:
+    vector1 (list): The first vector.
+    vector2 (list): The second vector.
+
+    Returns:
+    float: The dot product of the two vectors.
+    """
+    if len(vector1) != len(vector2):
+        raise ValueError("Vectors must have the same length")
+
+    dot_product_result = sum(vector1[i] * vector2[i] for i in range(len(vector1)))
+    return dot_product_result
+
+# Example usage:
+vector1 = [1, 2, 3]
+vector2 = [4, 5, 6]
+
+result = dot_product(vector1, vector2)
+print("Dot Product:", result)
+
+</p>
+<h1>matrix addition </h1>
+<p>
+    import numpy as np
+
+# Define the matrices X and Y
+X = np.array([[15, 10]])
+Y = np.array([[20, 36]])
+
+# Calculate the matrix addition
+matrix_addition = X + Y
+
+print("Matrix Addition:")
+print(matrix_addition)
+
+</p>
+<h1>students study hours</h1>
+<p>
+    import tensorflow as tf
+import numpy as np
+import pandas as pd
+
+# Load the dataset
+data = pd.read_csv('student_data.csv')
+X = data['study_hours'].values.reshape(-1, 1)
+y = data['exam_scores'].values
+
+# Split the data into training and testing sets
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create the single-layer neural network
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(units=1, input_shape=[1])
+])
+
+# Compile the model
+model.compile(optimizer='adam', loss='mean_squared_error')
+
+# Train the model
+model.fit(X_train, y_train, epochs=100, verbose=0)
+
+# Evaluate the model
+train_loss = model.evaluate(X_train, y_train, verbose=0)
+test_loss = model.evaluate(X_test, y_test, verbose=0)
+print(f"Train Loss: {train_loss:.4f}")
+print(f"Test Loss: {test_loss:.4f}")
+
+# Make predictions
+study_hours = np.array([5, 10]).reshape(-1, 1)
+predicted_scores = model.predict(study_hours)
+print(f"Predicted exam scores for 5 and 10 study hours: {predicted_scores.flatten()}")
+</p>
+
+<h1>read a csv file </h1>
+<p>
+    import pandas as pd
+
+# Read CSV file into DataFrame
+file_path = "your_file.csv"  # Replace "your_file.csv" with the path to your CSV file
+df = pd.read_csv(file_path)
+
+# Display the first few rows of the DataFrame
+print("First few rows of the DataFrame:")
+print(df.head())
+
+</p>
+<h1>information about customers</h1>
+<p>
+    import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+# Load the dataset
+data = pd.read_csv('customer_data.csv')
+
+# Separate the features (X) and target variable (y)
+X = data.drop('purchase_history', axis=1)
+y = data['purchase_history']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Random Forest classifier
+rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
+
+# Train the classifier
+rf_classifier.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = rf_classifier.predict(X_test)
+
+# Calculate the accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+
+# Print the classification report
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+</p>
+
+<h1> number of bedrooms and bathroms </h1>
+<p>
+    import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# Load the dataset
+data = pd.read_csv('real_estate_data.csv')
+
+# Separate the features (X) and target variable (y)
+X = data.drop('price', axis=1)
+y = data['price']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a linear regression model
+model = LinearRegression()
+
+# Train the model
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Calculate the mean squared error
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error: {mse:.2f}")
+</p>
+
+<h1>time series dataser</h1>
+<p>
+    import tensorflow as tf
+import numpy as np
+
+# Generate sample time series data
+time_series_data = np.sin(np.linspace(0, 10, 100)) + np.random.normal(0, 0.1, 100)
+
+# Convert the time series data to a TensorFlow tensor
+time_series_tensor = tf.constant(time_series_data, dtype=tf.float32)
+
+# Define the computation graph
+def anomaly_detection(time_series):
+    # Calculate the moving average
+    window_size = 10
+    moving_avg = tf.cumsum(time_series, exclusive=False)
+    moving_avg = moving_avg[window_size:] - moving_avg[:-window_size]
+    moving_avg /= window_size
+
+    # Calculate the difference between the time series and the moving average
+    anomaly_scores = tf.abs(time_series[window_size//2:-window_size//2] - moving_avg)
+
+    # Normalize the anomaly scores
+    anomaly_scores = (anomaly_scores - tf.reduce_min(anomaly_scores)) / (tf.reduce_max(anomaly_scores) - tf.reduce_min(anomaly_scores))
+
+    return anomaly_scores
+
+# Create the computation graph
+anomaly_scores = anomaly_detection(time_series_tensor)
+
+# Run the computation graph
+with tf.Session() as sess:
+    scores = sess.run(anomaly_scores)
+
+# Print the anomaly scores
+for score in scores:
+    print(f"Anomaly Score: {score:.2f}")
+</p>
+
+<h1> medical data set</h1>
+<p>
+    import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Load the dataset
+data = pd.read_csv('medical_data.csv')
+
+# Separate the features (X) and target variable (y)
+X = data.drop('disease', axis=1)
+y = data['disease']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a logistic regression model
+model = LogisticRegression()
+
+# Train the model
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Calculate the accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+</p>
